@@ -39,37 +39,72 @@ def position(systeme,dt=0.01):
 import turtle as t
 m=t.Turtle()
 o=t.Turtle()
+b=t.Turtle()
 t.reset
 m.shape("circle")
 o.shape("circle")
+b.shape("circle")
 m.speed(500)
 o.speed(500)
+b.speed(500)
 
 #console
+#grossissement
+g=100
 
-O=[10**10,[0,0],[0,0],[0,0]]
-M=[ 10,[1,0],[0,1],[0,0]]
+O=[10**10,[1/2, sqrt(3)/2],[-sqrt(3)/3,1/3] ,[0,0]]
+M=[10**10,[1/2,-sqrt(3)/2],[sqrt(3)/3,1/3]  ,[0,0]]
+B=[10**10,[-1,0]          ,[0,-2/3]         ,[0,0]]
 
-m.goto(100*M[1][0],100*M[1][1])
-o.goto(100*O[1][0],100*O[1][1])
+m.up()
+o.up()
+b.up()
+m.goto(g*M[1][0],g*M[1][1])
+o.goto(g*O[1][0],g*O[1][1])
+b.goto(g*B[1][0],g*B[1][1])
+m.down()
+o.down()
+b.down()
+
+m.color("red")
+o.color("green")
+b.color("blue")
 
 def start():
     while True:
-        Fm=forceG(O,M)
-        Fo=forceG(M,O)
-        pfd(M,[Fm])
-        pfd(O,[Fo])
+        #force
+        Fom=forceG(O,M)
+        Fmo=forceG(M,O)
+        Fob=forceG(O,B)
+        Fbo=forceG(B,O)
+        Fmb=forceG(M,B)
+        Fbm=forceG(B,M)
+        #pfd
+        pfd(M,[Fom,Fbm])
+        pfd(O,[Fmo,Fbo])
+        pfd(B,[Fob,Fmb])
         vitesse(M)
         vitesse(O)
+        vitesse(B)
         position(M)
         position(O)
-        m.goto(100*M[1][0],100*M[1][1])
-        o.goto(100*O[1][0],100*O[1][1])
+        position(B)
+        m.goto(g*M[1][0],g*M[1][1])
+        o.goto(g*O[1][0],g*O[1][1])
+        b.goto(g*B[1][0],g*B[1][1])
 start()
 
 #on voit un petit peu le debut de frottements numerique
 
 t.mainloop()
 
+import matplotlib.pyplot as plt
+import numpy as np
+
+def graph(f,var1,var2,T=1000):
+    X=[]
+    Y=[]
+    for i in range(0):
+        pass
 
 
