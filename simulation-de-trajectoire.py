@@ -27,11 +27,11 @@ def pfd(systeme,listeF):
     for i in range(2):
         systeme[3][i]=sommeF[i]/systeme[0]
 
-def vitesse(systeme,dt=0.01):
+def vitesse(systeme,dt=10000):
     for i in range(2):
         systeme[2][i]+=systeme[3][i]*dt
 
-def position(systeme,dt=0.01):
+def position(systeme,dt=10000):
     for i in range(2):
         systeme[1][i]+=systeme[2][i]*dt
 
@@ -50,11 +50,11 @@ b.speed(500)
 
 #console
 #grossissement
-g=100
+g=10**(-9)
 
-O=[10**10,[1/2, sqrt(3)/2],[-sqrt(3)/3,1/3] ,[0,0]]
-M=[10**10,[1/2,-sqrt(3)/2],[sqrt(3)/3,1/3]  ,[0,0]]
-B=[10**10,[-1,0]          ,[0,-2/3]         ,[0,0]]
+O=[2*10**30,[0,0],[0,0],[0,0]]
+M=[5.972*10**24,[149597870700,0],[0,29.78*1000],[0,0]]
+B=[7.5*10**22,[384400*1000+149597870700,0],[0,29.78*1000+1020],[0,0]]
 
 m.up()
 o.up()
@@ -66,9 +66,9 @@ m.down()
 o.down()
 b.down()
 
-m.color("red")
-o.color("green")
-b.color("blue")
+m.color("blue")
+o.color("red")
+b.color("green")
 
 def start():
     while True:
@@ -95,6 +95,15 @@ def start():
 start()
 
 #on voit un petit peu le debut de frottements numerique
+
+#soleil=[2*10**30,[0,0],[0,0],[0,0]]
+#terre=[5.972*10**24,[149597870700,0],[0,29.78*1000],[0,0]]
+#lune=[7.5*10**22,[384400*1000+149597870700,0],[0,29.78*1000+1020],[0,0]]
+
+#exemple2
+"""O=[10**10,[1/2, sqrt(3)/2],[-sqrt(3)/3,1/3] ,[0,0]]
+M=[10**10,[1/2,-sqrt(3)/2],[sqrt(3)/3,1/3]  ,[0,0]]
+B=[10**10,[-1,0]          ,[0,-2/3]         ,[0,0]]"""
 
 t.mainloop()
 
