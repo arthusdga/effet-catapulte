@@ -6,3 +6,4 @@ p: zoomer
 m: dezoomer
 fleche: bouger
 o: revenir a l'origine
+espace: stop/play
