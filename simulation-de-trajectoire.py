@@ -27,11 +27,11 @@ def pfd(systeme,listeF):
     for i in range(2):
         systeme[3][i]=sommeF[i]/systeme[0]
 
-def vitesse(systeme,dt=10000):
+def vitesse(systeme,dt=0.05):
     for i in range(2):
         systeme[2][i]+=systeme[3][i]*dt
 
-def position(systeme,dt=10000):
+def position(systeme,dt=0.05):
     for i in range(2):
         systeme[1][i]+=systeme[2][i]*dt
 
@@ -50,11 +50,11 @@ b.speed(500)
 
 #console
 #grossissement
-g=10**(-9)
+g=100
 
-O=[2*10**30,[0,0],[0,0],[0,0]]
-M=[5.972*10**24,[149597870700,0],[0,29.78*1000],[0,0]]
-B=[7.5*10**22,[384400*1000+149597870700,0],[0,29.78*1000+1020],[0,0]]
+O=[10**10,[1/2, sqrt(3)/2],[-sqrt(3)/4,1/4] ,[0,0]]
+M=[10**10,[1/2,-sqrt(3)/2],[sqrt(3)/4,1/4]  ,[0,0]]
+B=[10**10,[-1,0]          ,[0,-1/2]         ,[0,0]]
 
 m.up()
 o.up()
