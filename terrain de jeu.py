@@ -112,7 +112,8 @@ def start():
     O=[10**10,[0,0],[0,0] ,[0,0]]
     running = True
     play=True
-    t=10
+    t=20000
+    t0=0           #sert pour stopper le temps
     T=0
     C=[]
     while running:
@@ -151,6 +152,8 @@ def start():
                     [1.0243*10**26,[4498400000000,0],[0,5432.48],[0,0]],  #neptune
                     ]
                     T=0
+                if event.key == K_SPACE:
+                    t,t0=t0,t
         screen.fill("black")
     #force
         F=nforces(M)
