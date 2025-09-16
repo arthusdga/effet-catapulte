@@ -4,10 +4,40 @@ import pygame
 import random
 from math import sqrt
 import math
+import numpy as np
 
 from pygame.locals import *
 
-##
+##forcee
+
+
+def nforces(M):
+    n=len(M)
+    F=[[]for i in range(n)]
+    for i in range(n):
+        F[i].append(forceG(O,M[i]))
+        for j in range(i+1,n):
+            f=forceG(M[j],M[i])
+            F[i].append(f)
+            F[j].append([-f[0],-f[1]])
+    return(F)
+
+def force(M):
+    n=len(M)
+    FO=[]
+    for i in range(n):
+        FO.append(forceG(M[i],O))
+    return(FO)
+
+def Ffusee(M):
+    n=len(M)
+    Ff=[forceG(O,fusee)]
+    for i in range(n):
+        Ff.append(forceG(M[i],fusee))
+    return(FO)
+
+
+## trajectoire
 
 def forceG(A,B):
     r=0
@@ -38,34 +68,81 @@ def position(systeme,dt=100000):
     for i in range(2):
         systeme[1][i]+=systeme[2][i]*dt
 
-##planetes
+def traj(systeme,t):
+    pfd(systeme,force(M))
+    vitesse(systeme,t)
+    position(systeme,t)
+
+def trajM(planetes,t):
+    n=len(planetes)
+    F=nforces(planetes)
+    for i in range(n):
+        pfd(planetes[i],F[i])
+        vitesse(planetes[i],t)
+        position(planetes[i],t)
+
+
+##initialisation
 
 #fonction de recuperation des differentes positions, vitesses, et acceleration des planetes,(et masses) sur internet
 
-g=5*10**(-11)
-origine=[650,400]
+origine=[]
+g=0
+t=0
+t0=0
+T=0
+O=[]
+M=[]
+couleur=[]
+couleur0=[]
 
 
-O=[2*10**30,[0,0],[0,0],[0,0]]
-M=[
-[3.301*10**23,[46001200,0],[0,58980],[0,0]],  #mercure
-[4.8675*10**24,[108209500000,0],[0,35025.71],[0,0]],  #venus
-[5.972*10**24,[149597870700,0],[0,29.78*1000],[0,0]],  #terre
-[6.418*10**23,[227940000000,0],[0,24080],[0,0]],  #mars
-[1.8986*10**27,[778300000000,0],[0,13714],[0,0]],  #jupiter
-[5.6846*10**26,[14289700000000,0],[0,9640.7],[0,0]],  #saturne
-[8.681*10**25,[2870700000000,0],[0,6796.732],[0,0]],  #uranus
-[1.0243*10**26,[4498400000000,0],[0,5432.48],[0,0]],  #neptune
-]
 
+def initiateplanete():
+    global O,M,couleur,couleur0
+    O=[2*10**30,[0,0],[0,0],[0,0]]
+    M=[
+    [3.301*10**23,[46001200,0],[0,58980],[0,0]],  #mercure
+    [4.8675*10**24,[108209500000,0],[0,35025.71],[0,0]],  #venus
+    [5.972*10**24,[149597870700,0],[0,29.78*1000],[0,0]],  #terre
+    [6.418*10**23,[227940000000,0],[0,24080],[0,0]],  #mars
+    [1.8986*10**27,[778300000000,0],[0,13714],[0,0]],  #jupiter
+    [5.6846*10**26,[14289700000000,0],[0,9640.7],[0,0]],  #saturne
+    [8.681*10**25,[2870700000000,0],[0,6796.732],[0,0]],  #uranus
+    [1.0243*10**26,[4498400000000,0],[0,5432.48],[0,0]],  #neptune
+    ]
+    couleur=["green","green","cyan","green","green","green","green","green"]
+
+    couleur0=["silver","pink","cyan","salmon","brown","tan","mediumpurple","slateblue"]
+
+
+def initiaterepere():
+    global origine,g,t,t0,T
+    origine=[650,400]
+    g=5*10**(-11)
+    t=5000
+    t0=0           #sert pour stopper le temps
+    T=0
 
 
 ##fusee
 
-fusee=[100000,[],[],[]]
+#on prends l'exemple de le fusee ariane : poids fusee=270 000kg
+#                                         carburant=480 000kg
 
-def poussee():
-    pass
+fusee=[]
+tpoussee=0
+fpoussee=0
+
+def initiatefusee():
+    global fusee,tpousse,fpoussee
+    fusee=[750000,[227940000000,0],[0,24080],[0,0]]
+    tpoussee=0
+    fpoussee=0
+
+def npoussee(deltav):                     #norme de la pousse uniquement
+    global fpoussee,t
+    fpoussee=fusee[0]*deltav/t
 
 #on va lui donner du carburant. il faut set une quantite de carburant maximale et le poids a vide, modifier sa masse en fonction de la pousse
 
@@ -76,45 +153,30 @@ def poussee():
 # rajouter une variable qui calcule le temps de trajet
 
 
-##forcee
-
-
-def nforces(M):
-    n=len(M)
-    F=[[]for i in range(n)]
-    for i in range(n):
-        F[i].append(forceG(O,M[i]))
-        for j in range(i+1,n):
-            f=forceG(M[j],M[i])
-            F[i].append(f)
-            F[j].append([-f[0],-f[1]])
-    return(F)
-
-def forceO(M):
-    n=len(M)
-    FO=[]
-    for i in range(n):
-        FO.append(forceG(M[i],O))
-    return(FO)
 
 ## controle
 
 def start():
-    global M
-    n=len(M)
     global origine
-    global g
+    global O,M,couleur,fusee,tpousse,fpoussee
+    global g,t,t0,T
+
+    initiaterepere()
+    initiateplanete()
+    initiatefusee()
+
+    tpoussee=0
+
+    n=len(M)
+
     pygame.init()
     font = pygame.font.Font(None, 74)  # Police par défaut, taille 74
     screen = pygame.display.set_mode((1280, 720))
     pygame.display.set_caption("Terrain de jeu/fleche/o/p/m/a/z/r")
     clock = pygame.time.Clock()
-    O=[10**10,[0,0],[0,0] ,[0,0]]
     running = True
     play=True
-    t=20000
-    t0=0           #sert pour stopper le temps
-    T=0
+
     C=[]
     while running:
         for event in pygame.event.get():
@@ -140,33 +202,50 @@ def start():
                 if event.key == K_z:
                     t=t/2
                 if event.key == K_r:
-                    O=[2*10**30,[0,0],[0,0],[0,0]]
-                    M=[
-                    [3.301*10**23,[46001200,0],[0,58980],[0,0]],  #mercure
-                    [4.8675*10**24,[108209500000,0],[0,35025.71],[0,0]],  #venus
-                    [5.972*10**24,[149597870700,0],[0,29.78*1000],[0,0]],  #terre
-                    [6.418*10**23,[227940000000,0],[0,24080],[0,0]],  #mars
-                    [1.8986*10**27,[778300000000,0],[0,13714],[0,0]],  #jupiter
-                    [5.6846*10**26,[14289700000000,0],[0,9640.7],[0,0]],  #saturne
-                    [8.681*10**25,[2870700000000,0],[0,6796.732],[0,0]],  #uranus
-                    [1.0243*10**26,[4498400000000,0],[0,5432.48],[0,0]],  #neptune
-                    ]
+                    initiateplanete()
+                    initiatefusee()
                     T=0
                 if event.key == K_SPACE:
                     t,t0=t0,t
         screen.fill("black")
-    #force
-        F=nforces(M)
+
+
         #pfd
-        pfd(O,forceO(M))
-        vitesse(O)
-        position(O)
+        traj(O,t)
+        trajM(M,t)
+
+#ellipse de hohmann
+        if tpoussee==0:
+            fusee[1:4]=M[3][1:4]
+
+        beta=angle2planetes(4,3)
+
+
+        if (beta==2.14016189*10**(-10))and (tpoussee==0):
+            energiemeca=(-6.67*(10**(-11))*2*(10**30)*fusee[0]/(2*(227940000000+778300000000)))
+            deltavA=sqrt(2*energiemeca/fusee[0]-2*(10**30)*6.67*10**(-11)/227940000000)-24191.76989
+            tpoussee+=t
+            npousse(deltavA)
+
+        if tpoussee>0:
+            npousse+=t
+            traj(fusee,t)
+
+
+        if tpoussee>549103636:
+            deltat,tpousset=tpoussee,-1
+            deltavB=13091.95186-sqrt(2*energiemeca/fusee[0]-2*(10**30)*6.67*10**(-11)/778300000000)
+            npousse(deltavB)
+
+#pygame
+
         pygame.draw.circle(screen, "red",(origine[0],origine[1]), 4)
+        pygame.draw.circle(screen, 'mediumpurple' ,(origine[0]+g*fusee[1][0],origine[1]-g*fusee[1][1]), 3)
         for i in range(n):
-            pfd(M[i],F[i])
-            vitesse(M[i],t)
-            position(M[i],t)
-            pygame.draw.circle(screen, "green",(origine[0]+g*M[i][1][0],origine[1]-g*M[i][1][1]), 1.5)
+            pygame.draw.circle(screen, couleur[i] ,(origine[0]+g*M[i][1][0],origine[1]-g*M[i][1][1]), 2)
+
+
+
 
 
 # Rendu du texte
@@ -176,13 +255,20 @@ def start():
 
 
         pygame.display.flip()
-
         T+=t/31536000
         clock.tick(1000)  # limits FPS to t
     pygame.quit()
 
 
-
+def angle2planetes(indice1,indice2):
+    SM=[M[indice1][1][0]-O[1][0],M[indice1][1][1]-O[1][1]]
+    ST=[M[indice2][1][0]-O[1][0],M[indice2][1][1]-O[1][1]]
+    TM=[M[indice2][1][0]-M[indice1][1][0],M[indice2][1][1]-M[indice1][1][1]]
+    normeSM=sqrt(SM[0]**2+SM[1]**2)
+    normeST=sqrt(ST[0]**2+ST[1]**2)
+    normeTM=sqrt(TM[0]**2+TM[1]**2)
+    cos=(normeST**2+normeSM**2-normeTM**2)/(2*normeST*normeSM)
+    return(math.acos(cos))
 
 """probleme avec le soleil je n'arrive pas a bien l'afficher(autre qu'en ne le faisant pas bouger de la position d'origine)
 +probleme de mercure que je n'arrive pas a modeliser
