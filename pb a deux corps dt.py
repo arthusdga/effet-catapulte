@@ -1,13 +1,13 @@
 #pb a deux corps dt?->1%
-import pygame
+import numpy as np
+import time
+import matplotlib.pyplot as plt
 from math import sqrt
 import math
-from pygame.locals import *
-import numpy as np
 
 origine=[650,400]
 echelle=300
-dt=0.1
+dt=0.001
 t0=0
 GMm=1
 
@@ -39,11 +39,11 @@ def pfd(systeme,listeF):
 
 #ordre 1
 
-def vitesse(systeme,dt=100000):
+def vitesse(systeme,dt):
     for i in range(2):
         systeme[2][i]+=systeme[3][i]*dt
 
-def position(systeme,dt=100000):
+def position(systeme,dt):
     for i in range(2):
         systeme[1][i]+=systeme[2][i]*dt
 
@@ -73,93 +73,41 @@ def epp(A,B):
 def em(A,B):
     return(ec(A)+epp(A,B))
 
-EppA=[epp(A,O)]
-EcA=[ec(A)]
-xt=[0]
-i=0
 
-"""pygame.init()
-font = pygame.font.Font(None, 74)  # Police par défaut, taille 74
-screen = pygame.display.set_mode((1280, 720))
-pygame.display.set_caption("Terrain de jeu/fleche/o/p/m/a/z/r")
-clock = pygame.time.Clock()"""
-"""print('dt est '+str(dt))
-print("quelles duree de l'experience voulez vous")"""
-temps=100000
-T=temps
-while T>=0:
-    """for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            T=-dt-1
-        if event.type == KEYDOWN:
-            if event.key == K_UP:
-                origine[1]=origine[1]+10
-            if event.key == K_DOWN:
-                origine[1]=origine[1]-10
-            if event.key == K_LEFT:
-                origine[0]=origine[0]+10
-            if event.key == K_RIGHT:
-                origine[0]=origine[0]-10
-            if event.key == K_o:
-                origine=[650,400]
-            if event.key == K_p:
-                echelle*=2
-            if event.key == K_m:
-                echelle/=2
-            if event.key == K_a:
-                dt=dt*2
-            if event.key == K_z:
-                dt=dt/2
-            if event.key == K_r:
-                A=[10,[0,0],[0,0],[0,0]]
-                B=[0.1,[1,0],[0,3],[0,0]]
-                T=temps
-                EppA=[epp(A,O)]
-                EcA=[ec(A)]
-                xt=[0]
-                i=0
-            if event.key == K_SPACE:
-                dt,t0=t0,dt
+x = []
+y = []
 
-    screen.fill("black")"""
+plt.ion()
+
+figure, ax = plt.subplots(figsize=(8, 6))
+plt.axis([-1, 10**3,-0.5-10**(-5),-0.5+10**(-5)])
+plt.grid(True)
+
+(line1,) = ax.plot(x, y)
+
+plt.title("Dynamic Plot Em(x) ordre1", fontsize=25)
+
+plt.xlabel("t/dt (dt="+str(dt)+")", fontsize=18)
+plt.ylabel("Em (graduation a 10**-5)", fontsize=18)
+
+print('pour zoomer:clique droit+bouger la souris')
+
+for p in range(10**10):
+    x = x+[p]
+    y = y+[em(A,O)]
 
     pfd(A,[forceG(A,O)])
     vitesse(A,dt)
     position(A,dt)
 
-    EppA.append(epp(A,O))
-    EcA.append(ec(A))
-    xt.append(xt[i]+dt)
-    i+=1
+    line1.set_xdata(x)
+    line1.set_ydata(y)
 
-    """pygame.draw.circle(screen, "red",(echelle*O[1][0]+origine[0],origine[1]-echelle*O[1][1]), 5)
-    pygame.draw.circle(screen, "green",(echelle*A[1][0]+origine[0],origine[1]-echelle*A[1][1]), 5)
+    figure.canvas.draw()
 
-    pygame.display.flip()
-    clock.tick(1000000000)"""
-    T-=dt
-"""pygame.quit()"""
+    figure.canvas.flush_events()
+    #time.sleep(0.001)
 
-EmA=[EppA[i]+EcA[i] for i in range(len(EcA))]
-deltaEm=[EmA[i]/EmA[0] for i in range(len(EmA))]
+plt.pause(1800)
+plt.close()
 
-import matplotlib.pyplot as plt
-
-if True:
-# Tracé du graphe
-
-    #plt.plot(xt, EmA, marker=',', linestyle='-', color='b', label='energie mecanique de A')
-    plt.plot(xt, deltaEm, marker=',', linestyle='-', color='r', label='energie mecanique de A')
-    plt.yscale('log')
-    plt.ylim(0,10)
-
-
-# Ajout des titres et légendes
-    plt.title("frottements numerique ordre 1")
-    plt.xlabel("t")
-    plt.ylabel("Em")
-    plt.legend()
-    plt.grid(True)
-
-# Affichage du graphe
-    plt.show()
