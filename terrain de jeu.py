@@ -8,7 +8,7 @@ import numpy as np
 
 from pygame.locals import *
 
-##forcee
+#forcee
 
 
 def nforces(M):
@@ -37,7 +37,7 @@ def Ffusee(M):
     return(FO)
 
 
-## trajectoire
+# trajectoire
 
 def forceG(A,B):
     r=0
@@ -82,7 +82,7 @@ def trajM(planetes,t):
         position(planetes[i],t)
 
 
-##initialisation
+#initialisation
 
 #fonction de recuperation des differentes positions, vitesses, et acceleration des planetes,(et masses) sur internet
 
@@ -125,7 +125,7 @@ def initiaterepere():
     T=0
 
 
-##fusee
+#fusee
 
 #on prends l'exemple de le fusee ariane : poids fusee=270 000kg
 #                                         carburant=480 000kg
@@ -154,7 +154,7 @@ def npoussee(deltav):                     #norme de la pousse uniquement
 
 
 
-## controle
+# controle
 
 def start():
     global origine

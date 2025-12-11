@@ -7,7 +7,7 @@ import math
 
 origine=[650,400]
 echelle=300
-dt=0.001
+dt=0.00001
 t0=0
 GMm=1
 
@@ -37,7 +37,7 @@ def pfd(systeme,listeF):
     for i in range(2):
         systeme[3][i]=sommeF[i]/systeme[0]
 
-#ordre 1
+#ordre 1 (euler)
 
 def vitesse(systeme,dt):
     for i in range(2):
@@ -51,6 +51,7 @@ def traj(systeme,t):
     pfd(systeme,force(M))
     vitesse(systeme,t)
     position(systeme,t)
+
 
 
 #energie
