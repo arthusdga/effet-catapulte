@@ -150,7 +150,7 @@ def start(n):
     poussee=False
     deltavmin=2952.3
     deltavmax=12369.14052
-    #deltavmax+=80000
+    deltavmax+=80000
 
     deltav=deltavmin
     vn=(deltavmax-deltavmin)/n
@@ -194,15 +194,23 @@ def start(n):
 
     return(v,vtot,Ttot)
 
-v,vtot,T=start(100)
+v,vtot,T=start(1000)
 
-#Δm=[]
-#for k in v:
-#    Δm.append(750000*(math.exp(k/29.78/1000)-1))
+## afficher les resultats
 
-#plt.plot(v, Δm, label="Δm(Δv)", color="red", linestyle="-")
-plt.plot( T, vtot,label="T(Δvtot)", color="blue", linestyle="-")
-plt.plot( T,v, label="T(Δv)", color="red", linestyle="-")
+Δm=[]
+for k in v:
+    Δm.append(750000*(math.exp(k/29.78/1000)-1))
+
+Δmtot=[]
+for k in vtot:
+    Δmtot.append(750000*(math.exp(k/29.78/1000)-1))
+
+plt.plot(v, Δm, label="Δm(Δv)", color="green", linestyle="-")
+plt.plot(vtot, Δmtot, label="Δm(Δv)", color="green", linestyle="-")
+
+plt.plot(  vtot, T,label="T(Δvtot)", color="blue", linestyle="-")
+plt.plot( v, T, label="T(Δv)", color="red", linestyle="-")
 plt.title("evolution du temps de transfert en fonction du deltav total")
 plt.xlabel("Axe Δv")
 plt.ylabel("Axe T")
