@@ -7,12 +7,12 @@ import math
 
 origine=[650,400]
 echelle=300
-dt=10**(-26)
+dt=1.5*10**(-6)
 t0=0
 GMm=1
 
-AE=[1,[1,0],[0,1],[0,0]]
-AL=[1,[1,0],[0,1],[0,0]]
+AE=[1,[1,0],[0,1],[-1,0]]
+AL=[1,[1,0],[0,1],[-1,0]]
 O=[0,[0,0],[0,0],[0,0]]
 
 
@@ -73,7 +73,7 @@ def epp(A,B):
 def em(A,B):
     return(ec(A)+epp(A,B))
 
-
+##
 x = []
 yE = []
 yL = []
@@ -99,25 +99,30 @@ plt.ylabel("Em", fontsize=18)
 
 print('pour zoomer:clique droit+bouger la souris')
 
+#pfd(AE,[forceG(AE,O)])
+#pfd(AL,[forceG(AL,O)])
+
+#vitesse(AE,dt)
 vitesse(AL,dt/2)
 
 ax.legend()
 
-for p in range(10**10):
-    x=x+[p]
-    yE=yE+[em(AE,O)]
-    yL=yL+[em(AL,O)]
+for p in range(10**7):
 
+    position(AE,dt)
     pfd(AE,[forceG(AE,O)])
     vitesse(AE,dt)
-    position(AE,dt)
-
 
     position(AL,dt)
     pfd(AL,[forceG(AL,O)])
     vitesse(AL,dt)
 
-    if p%1000==0:
+    x=x+[p]
+    yE=yE+[em(AE,O)]
+    yL=yL+[em(AL,O)]
+
+
+    if p%10**2==0:
         line1.set_xdata(x)
         line1.set_ydata(yE)
         line2.set_xdata(x)
@@ -126,12 +131,12 @@ for p in range(10**10):
         figure.canvas.draw()
 
 
-        x=[]
+        """x=[]
         yE=[]
         yL=[]
         (line1,line2) = ax.plot(x, yE, x, yL)
         line1.set_color("blue")
-        line2.set_color("red")
+        line2.set_color("red")"""
 
 
         figure.canvas.flush_events()

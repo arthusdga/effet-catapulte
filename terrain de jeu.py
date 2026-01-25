@@ -255,7 +255,7 @@ def start():
 
 
         pygame.display.flip()
-        T+=t/31536000
+        T+=t/365/24/60/60
         clock.tick(1000)  # limits FPS to t
     pygame.quit()
 
