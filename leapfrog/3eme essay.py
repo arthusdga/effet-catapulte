@@ -4,8 +4,9 @@ import matplotlib.pyplot as plt
 
 m=1
 
-dt=10**(-3)
-n=10**3
+dt=1.e-3
+n=int(1.e5)
+
 
 pose=np.array([1,0])
 vite=np.array([0,1])
@@ -32,8 +33,6 @@ def em(pos,vit):
 vitl = vitl + force(posl) * dt *0.5
 
 for i in range(n):
-    eme.append(em(pose,vite))
-    eml.append(em(posl,vitl + (dt/2) * force(posl)))
 
     pose = pose + vite * vite * dt
     posl = posl + vitl * vitl * dt
