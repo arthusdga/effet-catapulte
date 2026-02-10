@@ -34,8 +34,8 @@ vitl = vitl + force(posl) * dt *0.5
 
 for i in range(n):
 
-    pose = pose + vite * vite * dt
-    posl = posl + vitl * vitl * dt
+    pose = pose + vite * dt
+    posl = posl + vitl * dt
 
     eme.append(em(pose,vite))
     eml.append(em(posl,vitl + (dt/2) * force(posl)))
@@ -54,6 +54,7 @@ eme=np.array(eme)
 eml=np.array(eml)
 t=np.array([dt*i for i in range(len(eme))])
 
+np.rolling(3).
 
 plt.plot(eme, label='euler')
 plt.plot(eml,   label='leapfrog')
